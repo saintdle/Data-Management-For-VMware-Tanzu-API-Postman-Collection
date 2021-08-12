@@ -1,0 +1,2406 @@
+{
+	"info": {
+		"_postman_id": "5dbf575a-0fc3-400a-8ce6-225079a2ab07",
+		"name": "Data Management for VMware Tanzu",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Get Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"let authToken = postman.getResponseHeader(\"Authorization\")",
+									"postman.setEnvironmentVariable(\"accessToken\", authToken)",
+									"tests[\"Response contains OrgId\"] = responseBody.has(\"orgId\");",
+									"postman.clearEnvironmentVariable(\"OrgId\");",
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"OrgId\", data.orgMemberships[0].orgId)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"{{userName}}\",\n  \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/session",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"session"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Provider Health",
+			"item": [
+				{
+					"name": "Appliance Status",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/appliance/status",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appliance",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Provider Application Status",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/status",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Provider Health",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/appliance/providerhealth",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"appliance",
+								"providerhealth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Organisation",
+			"item": [
+				{
+					"name": "Get Organizations",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/orgs",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"orgs"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"description": "Zero-based page index (0..N)",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "20",
+									"description": "The size of the page to be returned",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "dolor proident mollit est occaecat",
+									"description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "sed voluptate incidid",
+									"description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Endpoint to get organizations details<br/><b>Authorized Roles</b> : PROVIDER"
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/orgs?page=0&size=20&sort=fugiat consequat&sort=veniam ex est sit velit",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orgs"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "20"
+										},
+										{
+											"key": "sort",
+											"value": "fugiat consequat"
+										},
+										{
+											"key": "sort",
+											"value": "veniam ex est sit velit"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/vnd.vmware.dms-v1+json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"links\": [\n  {\n   \"rel\": \"ullamco\",\n   \"href\": \"Lorem ipsum eu\",\n   \"hreflang\": \"eiusmod non\",\n   \"media\": \"in labore\",\n   \"title\": \"enim\",\n   \"type\": \"eu ut dolor sunt\",\n   \"deprecation\": \"sit officia adipisicing aute\",\n   \"profile\": \"id Ut\",\n   \"name\": \"dolore Lorem nulla sit\"\n  },\n  {\n   \"rel\": \"ad aute\",\n   \"href\": \"minim aliqua\",\n   \"hreflang\": \"laboris sed ea\",\n   \"media\": \"qu\",\n   \"title\": \"id Excepteur et Lorem\",\n   \"type\": \"dolor cupidatat sint\",\n   \"deprecation\": \"dolor dolore al\",\n   \"profile\": \"esse qui\",\n   \"name\": \"veniam commodo exercitation labore dolore\"\n  }\n ],\n \"content\": [\n  {\n   \"id\": \"urn:uuid:a1878b16-d834-a648-9a0e-d51948a4c090\",\n   \"companyName\": \"exercitation pariatur Duis\",\n   \"email\": \"in Duis velit\",\n   \"instanceMode\": \"FREE_MODE\",\n   \"deleted\": false,\n   \"orgType\": \"PROVIDER_ORG\",\n   \"ldapOrgDetails\": {\n    \"id\": \"urn:uuid:1ae5c375-5624-a80d-730d-f1f29d08bebc\",\n    \"ldapServerDetailsId\": \"urn:uuid:cef4ddaf-09e0-0c52-09b6-b2221345dd28\",\n    \"ldapType\": \"PROVIDER_MANAGED\",\n    \"ldapServerDetails\": {\n     \"domain\": \"eu ut mollit Duis\",\n     \"hostAddress\": \"aute mollit\",\n     \"id\": \"urn:uuid:879a1cc2-0723-8e04-09fb-ec5f82729506\",\n     \"type\": \"PROVIDER_MANAGED\",\n     \"port\": -87046464,\n     \"firstNameAttribute\": \"aute commodo proident anim\",\n     \"lastNameAttribute\": \"sed magna\",\n     \"baseDn\": \"et exercitation\",\n     \"searchFilter\": \"eu consectetur consequat ea\",\n     \"loginAttribute\": \"id\",\n     \"thumbprint\": \"velit\",\n     \"deleted\": true,\n     \"userName\": \"dolore\",\n     \"password\": \"est\",\n     \"sslEnabled\": false,\n     \"sslCert\": {\n      \"privateKey\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"certificate\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"parentCert\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n     },\n     \"createdTimestamp\": \"1954-06-25T21:15:29.929Z\"\n    },\n    \"adminGroups\": [\n     \"amet culpa cupidatat eiusmod laborum\",\n     \"sunt ex\"\n    ],\n    \"userGroups\": [\n     \"adipisicing sunt\",\n     \"i\"\n    ],\n    \"providerGroups\": [\n     \"cillum labore in dolore\",\n     \"voluptate cillum nisi\"\n    ],\n    \"deleted\": true,\n    \"createdTimestamp\": \"1951-10-08T00:01:20.667Z\"\n   },\n   \"links\": [\n    {\n     \"rel\": \"irure ad laborum minim\",\n     \"href\": \"culpa sunt in\",\n     \"hreflang\": \"sit sed deserunt\",\n     \"media\": \"ipsum occaecat\",\n     \"title\": \"consectetur nostrud ut\",\n     \"type\": \"ad qui cillum esse tempor\",\n     \"deprecation\": \"eu E\",\n     \"profile\": \"quis Excepteur in ad\",\n     \"name\": \"in ad sit\"\n    },\n    {\n     \"rel\": \"ut cillum consequat\",\n     \"href\": \"sit Excepteur officia\",\n     \"hreflang\": \"deserunt Excepteur minim sunt\",\n     \"media\": \"est laboris mollit\",\n     \"title\": \"cupidatat non dolor\",\n     \"type\": \"adipisicing nostrud in\",\n     \"deprecation\": \"aute reprehenderit\",\n     \"profile\": \"dolor irure in deserunt sint\",\n     \"name\": \"nisi fugiat dolore\"\n    }\n   ]\n  },\n  {\n   \"id\": \"50d301fc-4b57-d17d-a7a0-08a4669f04af\",\n   \"companyName\": \"sed incididunt est ipsum deserunt\",\n   \"email\": \"anim in incididunt\",\n   \"instanceMode\": \"PLANS_MODE\",\n   \"deleted\": true,\n   \"orgType\": \"PROVIDER_ORG\",\n   \"ldapOrgDetails\": {\n    \"id\": \"e7d69f54-739a-0711-3f24-6cd3141efc4e\",\n    \"ldapServerDetailsId\": \"urn:uuid:5cf634c9-99a0-24f1-8651-62114fdef5eb\",\n    \"ldapType\": \"PROVIDER_MANAGED\",\n    \"ldapServerDetails\": {\n     \"domain\": \"nulla cillum ad\",\n     \"hostAddress\": \"esse laboris voluptate occaecat\",\n     \"id\": \"7ad5320b-79cb-26a1-e820-1c1e0020af8e\",\n     \"type\": \"TENANT_MANAGED\",\n     \"port\": 54369496,\n     \"firstNameAttribute\": \"nulla\",\n     \"lastNameAttribute\": \"nostrud eu\",\n     \"baseDn\": \"dolore consectetur fugiat\",\n     \"searchFilter\": \"sed veniam\",\n     \"loginAttribute\": \"tempor est quis\",\n     \"thumbprint\": \"aliqua ex\",\n     \"deleted\": false,\n     \"userName\": \"eu ad anim tempor consequat\",\n     \"password\": \"et Excepteur amet\",\n     \"sslEnabled\": true,\n     \"sslCert\": {\n      \"privateKey\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"certificate\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"parentCert\": {\n       \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n     },\n     \"createdTimestamp\": \"1949-06-04T05:38:57.642Z\"\n    },\n    \"adminGroups\": [\n     \"aliqua velit \",\n     \"proident magna\"\n    ],\n    \"userGroups\": [\n     \"officia dolore ea dolore\",\n     \"aliquip est laborum dolore\"\n    ],\n    \"providerGroups\": [\n     \"aute non Duis enim\",\n     \"et ut aliqua consequat nostrud\"\n    ],\n    \"deleted\": false,\n    \"createdTimestamp\": \"2007-04-10T04:08:06.918Z\"\n   },\n   \"links\": [\n    {\n     \"rel\": \"ea consectetur cupidata\",\n     \"href\": \"laboris fugiat labore ut officia\",\n     \"hreflang\": \"id sunt nostrud\",\n     \"media\": \"aliquip nisi sed id commodo\",\n     \"title\": \"id ea commodo tempor\",\n     \"type\": \"sunt sit\",\n     \"deprecation\": \"sunt\",\n     \"profile\": \"cillum id\",\n     \"name\": \"nisi commodo\"\n    },\n    {\n     \"rel\": \"quis dolor\",\n     \"href\": \"non dolore aliqua\",\n     \"hreflang\": \"eiusmod nulla ut adipis\",\n     \"media\": \"exercitation sit qui\",\n     \"title\": \"reprehen\",\n     \"type\": \"Lorem eu adipisicing\",\n     \"deprecation\": \"fugiat ex incididunt\",\n     \"profile\": \"veniam nostrud\",\n     \"name\": \"ullamco aliquip dolor\"\n    }\n   ]\n  }\n ],\n \"page\": {\n  \"size\": 18813104,\n  \"totalElements\": -72387255,\n  \"totalPages\": -61102227,\n  \"number\": -32699766\n }\n}"
+						},
+						{
+							"name": "Bad Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/orgs?page=0&size=20&sort=fugiat consequat&sort=veniam ex est sit velit",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"orgs"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "20"
+										},
+										{
+											"key": "sort",
+											"value": "fugiat consequat"
+										},
+										{
+											"key": "sort",
+											"value": "veniam ex est sit velit"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Specific User",
+					"item": [
+						{
+							"name": "Get user detail by ID",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/vnd.vmware.dms-v1+json",
+										"type": "text"
+									},
+									{
+										"key": "X-Org-ID",
+										"value": "{{OrgId}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/provider/users/:id",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"provider",
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "4"
+										}
+									]
+								},
+								"description": "Use this endpoint to fetch specific user details<br/><b>Authorized Roles</b> : PROVIDER"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/users/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/vnd.vmware.dms-v1+json"
+										}
+									],
+									"cookie": [],
+									"body": "{}"
+								},
+								{
+									"name": "Bad Request",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/users/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Delete user",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/vnd.vmware.dms-v1+json",
+										"type": "text"
+									},
+									{
+										"key": "X-Org-ID",
+										"value": "{{OrgId}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/provider/users/:id",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"provider",
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "5",
+											"description": "(Required) ID of the user"
+										}
+									]
+								},
+								"description": "Use this endpoint to delete DMS user<br/><b>Authorized Roles</b> : PROVIDER"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/users/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/vnd.vmware.dms-v1+json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n \"firstName\": \"magna eiusmod veniam\",\n \"lastName\": \"anim nulla consectetur laboris\",\n \"contactNumber\": \"velit esse \",\n \"email\": \"minim non do aliqua\",\n \"type\": \"LDAP\",\n \"orgMemberships\": [\n  {\n   \"orgId\": \"7ea3f493-09e0-0965-0454-113a8a74942a\",\n   \"companyName\": \"ex exercitation\",\n   \"email\": \"ut occaecat ad\",\n   \"roles\": [\n    \"PROVIDER\",\n    \"ORG_ADMIN\"\n   ]\n  },\n  {\n   \"orgId\": \"urn:uuid:53ed0413-c91a-d8a1-4328-18a36f739078\",\n   \"companyName\": \"incid\",\n   \"email\": \"adipisicing\",\n   \"roles\": [\n    \"PROVIDER\",\n    \"ORG_ADMIN\"\n   ]\n  }\n ]\n}"
+								},
+								{
+									"name": "Bad Request",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/users/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Update user details",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/vnd.vmware.dms-v1+json",
+										"type": "text"
+									},
+									{
+										"key": "X-Org-ID",
+										"value": "{{OrgId}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"roles\": [\n        \"ORG_USER\",\n        \"ORG_ADMIN\"\n    ],\n    \"contactNumber\": \"Ut de\",\n    \"tenantId\": \"f383830c-cb57-3086-9a9f-21c3d89ed10c\"\n}"
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/provider/users/:id/update-user-details",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"provider",
+										"users",
+										":id",
+										"update-user-details"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-3814185",
+											"description": "(Required) ID of the user"
+										}
+									]
+								},
+								"description": "Use this endpoint to update user details<br/><b>Authorized Roles</b> : PROVIDER"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"roles\": [\n        \"ORG_ADMIN\",\n        \"PROVIDER\"\n    ],\n    \"contactNumber\": \"E\",\n    \"tenantId\": \"bbcf122d-9dbc-2ce3-a606-fdfb921216f6\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/users/:id/update-user-details",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id",
+												"update-user-details"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/vnd.vmware.dms-v1+json"
+										}
+									],
+									"cookie": [],
+									"body": "{}"
+								},
+								{
+									"name": "Bad Request",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"roles\": [\n        \"ORG_ADMIN\",\n        \"PROVIDER\"\n    ],\n    \"contactNumber\": \"E\",\n    \"tenantId\": \"bbcf122d-9dbc-2ce3-a606-fdfb921216f6\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/users/:id/update-user-details",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id",
+												"update-user-details"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Reset user password",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/vnd.vmware.dms-v1+json",
+										"type": "text"
+									},
+									{
+										"key": "X-Org-ID",
+										"value": "{{OrgId}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"newPassword\": \"5IYP!!riHV\"\n}"
+								},
+								"url": {
+									"raw": "https://{{baseUrl}}/provider/users/:id/reset-password",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"provider",
+										"users",
+										":id",
+										"reset-password"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-3814185",
+											"description": "(Required) ID of the user"
+										}
+									]
+								},
+								"description": "Use this endpoint to reset user password<br/><b>Authorized Roles</b> : PROVIDER"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"newPassword\": \"5IYP!!riHV\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/users/:id/reset-password",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id",
+												"reset-password"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/vnd.vmware.dms-v1+json"
+										}
+									],
+									"cookie": [],
+									"body": "\"\""
+								},
+								{
+									"name": "Bad Request",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"newPassword\": \"5IYP!!riHV\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/users/:id/reset-password",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id",
+												"reset-password"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Get user organizations",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/vnd.vmware.dms-v1+json",
+										"type": "text"
+									},
+									{
+										"key": "X-Org-ID",
+										"value": "{{OrgId}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/provider/users/:id/organizations",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"provider",
+										"users",
+										":id",
+										"organizations"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "-3814185",
+											"description": "(Required) ID of the user"
+										}
+									]
+								},
+								"description": "Use this endpoint to retrieve all organizations of the user<br/><b>Authorized Roles</b> : PROVIDER"
+							},
+							"response": [
+								{
+									"name": "OK",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/users/:id/organizations",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id",
+												"organizations"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/vnd.vmware.dms-v1+json"
+										}
+									],
+									"cookie": [],
+									"body": "{}"
+								},
+								{
+									"name": "Bad Request",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"description": "Added as a part of security scheme: bearer",
+												"key": "Authorization",
+												"value": "Bearer <token>"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/users/:id/organizations",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"users",
+												":id",
+												"organizations"
+											],
+											"variable": [
+												{
+													"key": "id"
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "*/*"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Get list of DMS users",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/users",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0",
+									"description": "Zero-based page index (0..N)",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "20",
+									"description": "The size of the page to be returned",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "dolor proident mollit est occaecat",
+									"description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "sed voluptate incidid",
+									"description": "Sorting criteria in the format: property(,asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+									"disabled": true
+								},
+								{
+									"key": "tenantId",
+									"value": "urn:uuid:5fd4790d-6d22-576f-1910-c95893b40d77",
+									"description": "ID of organization",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Use this endpoint to retrieve list of all the users<br/><b>Authorized Roles</b> : PROVIDER"
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/users?page=0&size=20&sort=fugiat consequat&sort=veniam ex est sit velit&tenantId=urn:uuid:5fd4790d-6d22-576f-1910-c95893b40d77",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "20"
+										},
+										{
+											"key": "sort",
+											"value": "fugiat consequat"
+										},
+										{
+											"key": "sort",
+											"value": "veniam ex est sit velit"
+										},
+										{
+											"key": "tenantId",
+											"value": "urn:uuid:5fd4790d-6d22-576f-1910-c95893b40d77"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/vnd.vmware.dms-v1+json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n \"links\": [\n  {\n   \"rel\": \"ad \",\n   \"href\": \"pariatur consectetur\",\n   \"hreflang\": \"fugiat\",\n   \"media\": \"volup\",\n   \"title\": \"incididunt nostrud\",\n   \"type\": \"ipsum commodo dolore\",\n   \"deprecation\": \"reprehenderit irure Excepteur\",\n   \"profile\": \"incididunt aliquip in\",\n   \"name\": \"occaecat deserunt sed consequat ad\"\n  },\n  {\n   \"rel\": \"ut quis qui in\",\n   \"href\": \"sunt\",\n   \"hreflang\": \"dolore sint aliqua\",\n   \"media\": \"eiusmod in laboris\",\n   \"title\": \"magna incididunt laboris ullamco\",\n   \"type\": \"deserunt dolore nostrud anim\",\n   \"deprecation\": \"ipsum enim\",\n   \"profile\": \"qui sunt proident\",\n   \"name\": \"aliqu\"\n  }\n ],\n \"content\": [\n  {\n   \"id\": -66590010,\n   \"firstName\": \"qui iru\",\n   \"lastName\": \"qui eu quis in mag\",\n   \"contactNumber\": \"nostrud ut\",\n   \"email\": \"Lorem labore ullamco ea\",\n   \"tenantId\": \"urn:uuid:6541e88c-d0df-d520-485c-16e4ebb4be51\",\n   \"companyName\": \"nostrud quis\",\n   \"roles\": [\n    \"PROVIDER\",\n    \"ORG_USER\"\n   ],\n   \"type\": \"TDM\",\n   \"links\": [\n    {\n     \"rel\": \"eiusmod fugiat dolor anim\",\n     \"href\": \"enim\",\n     \"hreflang\": \"et enim sunt magna dolore\",\n     \"media\": \"et exercitation\",\n     \"title\": \"elit reprehenderit\",\n     \"type\": \"non Duis\",\n     \"deprecation\": \"ad sit irure\",\n     \"profile\": \"n\",\n     \"name\": \"ipsum voluptate\"\n    },\n    {\n     \"rel\": \"elit exercitation amet eiusmod\",\n     \"href\": \"aute re\",\n     \"hreflang\": \"id enim ad\",\n     \"media\": \"enim ex\",\n     \"title\": \"officia et deserunt esse\",\n     \"type\": \"voluptate sed ad do Ut\",\n     \"deprecation\": \"dolor qui ex in\",\n     \"profile\": \"velit repr\",\n     \"name\": \"adipisicing\"\n    }\n   ]\n  },\n  {\n   \"id\": 84946940,\n   \"firstName\": \"Lorem\",\n   \"lastName\": \"amet Excepteur\",\n   \"contactNumber\": \"occaecat aliquip id\",\n   \"email\": \"officia ut esse adipisicing fugiat\",\n   \"tenantId\": \"urn:uuid:e4719859-8ce3-7bf7-be73-defd2c2f5455\",\n   \"companyName\": \"ipsum ut ea ex mollit\",\n   \"roles\": [\n    \"ORG_ADMIN\",\n    \"ORG_USER\"\n   ],\n   \"type\": \"TDM\",\n   \"links\": [\n    {\n     \"rel\": \"aliqua et aute\",\n     \"href\": \"occaecat dolor velit\",\n     \"hreflang\": \"mollit\",\n     \"media\": \"dol\",\n     \"title\": \"enim paria\",\n     \"type\": \"deserunt ut\",\n     \"deprecation\": \"fugiat in veniam qui\",\n     \"profile\": \"quis tempor sed Ut\",\n     \"name\": \"fugiat dolor veniam\"\n    },\n    {\n     \"rel\": \"ad amet\",\n     \"href\": \"occaecat c\",\n     \"hreflang\": \"Duis consectetur do dolore\",\n     \"media\": \"nisi est\",\n     \"title\": \"eu\",\n     \"type\": \"ipsum Excepteur\",\n     \"deprecation\": \"aliquip amet\",\n     \"profile\": \"dolor\",\n     \"name\": \"in exercitation do\"\n    }\n   ]\n  }\n ],\n \"page\": {\n  \"size\": -38093755,\n  \"totalElements\": -55815680,\n  \"totalPages\": -44673896,\n  \"number\": -47998538\n }\n}"
+						},
+						{
+							"name": "Bad Request",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/users?page=0&size=20&sort=fugiat consequat&sort=veniam ex est sit velit&tenantId=urn:uuid:5fd4790d-6d22-576f-1910-c95893b40d77",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "20"
+										},
+										{
+											"key": "sort",
+											"value": "fugiat consequat"
+										},
+										{
+											"key": "sort",
+											"value": "veniam ex est sit velit"
+										},
+										{
+											"key": "tenantId",
+											"value": "urn:uuid:5fd4790d-6d22-576f-1910-c95893b40d77"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Create user",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"api@test.com\",\n    \"firstName\": \"api\",\n    \"lastName\": \"test\",\n    \"password\": \"SbsM^zB5Sj2^5ok^\",\n    \"roles\": [\n        \"ORG_USER\"\n    ],\n    \"tenantId\": \"9a4f6ac9-c428-42b4-8c43-de47636ad602\"\n}"
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/users",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"users"
+							]
+						},
+						"description": "Use this endpoint to create user<br/><b>Authorized Roles</b> : PROVIDER"
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"ut sint\",\n    \"firstName\": \"nisi cupidatat irure ullamco\",\n    \"lastName\": \"cupidatat mollit occaecat si\",\n    \"password\": \"l$%MYgDiA@y#X\",\n    \"roles\": [\n        \"ORG_USER\",\n        \"ORG_ADMIN\"\n    ],\n    \"tenantId\": \"urn:uuid:707c8def-4f5e-768d-7bad-48d6e86bec9f\",\n    \"contactNumber\": \"nulla eu officia ullamc\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/vnd.vmware.dms-v1+json"
+								}
+							],
+							"cookie": [],
+							"body": "{}"
+						},
+						{
+							"name": "Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"ut sint\",\n    \"firstName\": \"nisi cupidatat irure ullamco\",\n    \"lastName\": \"cupidatat mollit occaecat si\",\n    \"password\": \"l$%MYgDiA@y#X\",\n    \"roles\": [\n        \"ORG_USER\",\n        \"ORG_ADMIN\"\n    ],\n    \"tenantId\": \"urn:uuid:707c8def-4f5e-768d-7bad-48d6e86bec9f\",\n    \"contactNumber\": \"nulla eu officia ullamc\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Change current user password",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"currentPassword\": \"ea sit\",\n    \"newPassword\": \"4tTKtivWgYeVc@Sf$eJ\"\n}"
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}/users/change-password",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"change-password"
+							]
+						},
+						"description": "Use this endpoint to change current user password<br/><b>Authorized Roles</b> : ANY"
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									},
+									{
+										"description": "(Required) ",
+										"key": "Authorization",
+										"value": "commodo amet elit"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"currentPassword\": \"ea sit\",\n    \"newPassword\": \"4tTKtivWgYeVc@Sf$eJ\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/change-password",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"change-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/vnd.vmware.dms-v1+json"
+								}
+							],
+							"cookie": [],
+							"body": "\"\""
+						},
+						{
+							"name": "Bad Request",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									},
+									{
+										"description": "(Required) ",
+										"key": "Authorization",
+										"value": "commodo amet elit"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"currentPassword\": \"ea sit\",\n    \"newPassword\": \"4tTKtivWgYeVc@Sf$eJ\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/change-password",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"change-password"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Databases",
+			"item": [
+				{
+					"name": "Specific Database",
+					"item": [
+						{
+							"name": "Get Database by Id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/vnd.vmware.dms-v1+json",
+										"type": "text"
+									},
+									{
+										"key": "X-Org-ID",
+										"value": "{{OrgId}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/provider/databases/:id",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"provider",
+										"databases",
+										":id"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										},
+										{
+											"key": "size",
+											"value": "20",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "dolor proident mollit est occaecat",
+											"disabled": true
+										},
+										{
+											"key": "sort",
+											"value": "sed voluptate incidid",
+											"disabled": true
+										},
+										{
+											"key": "tenantId",
+											"value": "urn:uuid:5fd4790d-6d22-576f-1910-c95893b40d77",
+											"disabled": true
+										},
+										{
+											"key": "environmentId",
+											"value": "urn:uuid:5fd4790d-6d22-576f-1910-c95893b40d77",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "809eaf87-db09-44d9-897c-c842ad6c72ad"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Database Root Password",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/vnd.vmware.dms-v1+json",
+										"type": "text"
+									},
+									{
+										"key": "X-Org-ID",
+										"value": "{{OrgId}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/provider/databases/:id/root-password",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"provider",
+										"databases",
+										":id",
+										"root-password"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "809eaf87-db09-44d9-897c-c842ad6c72ad"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Database Admin Password",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/vnd.vmware.dms-v1+json",
+										"type": "text"
+									},
+									{
+										"key": "X-Org-ID",
+										"value": "{{OrgId}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/provider/databases/:id/admin-password",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"provider",
+										"databases",
+										":id",
+										"admin-password"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "809eaf87-db09-44d9-897c-c842ad6c72ad"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Database Flagged Alerts",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/vnd.vmware.dms-v1+json",
+										"type": "text"
+									},
+									{
+										"key": "X-Org-ID",
+										"value": "{{OrgId}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/provider/databases/:id/flagged-alerts",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"provider",
+										"databases",
+										":id",
+										"flagged-alerts"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "809eaf87-db09-44d9-897c-c842ad6c72ad"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Database Alerts",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/vnd.vmware.dms-v1+json",
+										"type": "text"
+									},
+									{
+										"key": "X-Org-ID",
+										"value": "{{OrgId}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/provider/databases/:id/alerts",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"provider",
+										"databases",
+										":id",
+										"alerts"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "809eaf87-db09-44d9-897c-c842ad6c72ad"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Database Version",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/vnd.vmware.dms-v1+json",
+										"type": "text"
+									},
+									{
+										"key": "X-Org-ID",
+										"value": "{{OrgId}}",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{accessToken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{baseUrl}}/provider/databases/version/:id",
+									"protocol": "https",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"provider",
+										"databases",
+										"version",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "809eaf87-db09-44d9-897c-c842ad6c72ad"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Databases",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/databases?page=0&size=20&sort=dolor proident mollit est occaecat&sort=sed voluptate incidid&tenantId=urn:uuid:5fd4790d-6d22-576f-1910-c95893b40d77&environmentId=urn:uuid:5fd4790d-6d22-576f-1910-c95893b40d77",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"databases"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "20"
+								},
+								{
+									"key": "sort",
+									"value": "dolor proident mollit est occaecat"
+								},
+								{
+									"key": "sort",
+									"value": "sed voluptate incidid"
+								},
+								{
+									"key": "tenantId",
+									"value": "urn:uuid:5fd4790d-6d22-576f-1910-c95893b40d77"
+								},
+								{
+									"key": "environmentId",
+									"value": "urn:uuid:5fd4790d-6d22-576f-1910-c95893b40d77"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Database",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/databases/:dbUUID?force=false",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"databases",
+								":dbUUID"
+							],
+							"query": [
+								{
+									"key": "force",
+									"value": "false"
+								}
+							],
+							"variable": [
+								{
+									"key": "dbUUID",
+									"value": "292752d3-b829-4293-8c06-401c3407541b"
+								}
+							]
+						},
+						"description": "Endpoint to create database<br/><b>Authorized Roles</b> : ORG_ADMIN or ORG_USER"
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"dataStoreName\": \"cillum minim\",\n    \"dbConfig\": {\n        \"adminPassword\": \"INNC*MSH5ILpdt\",\n        \"adminUser\": \"veniam quis mollit\",\n        \"dbName\": \"occaecat ea\",\n        \"monitoringType\": \"ENHANCED\",\n        \"port\": 33264,\n        \"replicationUser\": \"dolor Ut magna\",\n        \"replicationPassword\": \"mollit quis occaecat\",\n        \"rootPassword\": \"esse ea\"\n    },\n    \"environmentId\": \"569a4353-d51b-decb-18d6-05af013bd482\",\n    \"instanceName\": \"qui exercitation dolor\",\n    \"provisioningConfig\": {\n        \"type\": \"magna sunt laboris\",\n        \"master\": {\n            \"hwConfig\": {\n                \"hdDiskSizeGB\": 65040,\n                \"cpuCores\": -93165974,\n                \"memoryGB\": -82165130,\n                \"instancePlanId\": \"urn:uuid:5b0ed2f3-d1a6-5dd6-5581-b4a98294a865\",\n                \"thinDisk\": true\n            }\n        },\n        \"segment\": {\n            \"hwConfig\": {\n                \"hdDiskSizeGB\": 36530,\n                \"cpuCores\": 82027410,\n                \"memoryGB\": 2804103,\n                \"instancePlanId\": \"urn:uuid:1406e2f6-6176-f5ef-57b2-8bfb5fd310e3\",\n                \"thinDisk\": true\n            },\n            \"primarySegmentsCount\": 60316834\n        }\n    },\n    \"templateId\": \"e6c36b16-5662-a6e0-14ab-6ac944d1db4e\",\n    \"dbBackupConfig\": {\n        \"automatedBackupStartTime\": \"21:26\",\n        \"numLocalBackupDays\": 18,\n        \"numRemoteBackupDays\": 96526897\n    },\n    \"dbMaintenanceConfig\": {\n        \"maintenanceWindowStartDay\": \"TUESDAY\",\n        \"maintenanceWindowStartTime\": \"2:28\",\n        \"maintenanceWindowDuration\": \"ad\",\n        \"minorVersionUpgradeEnabled\": true,\n        \"maintenanceWindowSelected\": false\n    },\n    \"enableProtection\": true,\n    \"requireClientSsl\": false,\n    \"dbOptions\": [\n        {\n            \"key\": \"nulla esse ullamco ex\",\n            \"value\": \"ea enim incididunt in\"\n        },\n        {\n            \"key\": \"dolor reprehenderit sunt dolore Ut\",\n            \"value\": \"officia do sint ut\"\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/databases",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"databases"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/vnd.vmware.dms-v1+json"
+								}
+							],
+							"cookie": [],
+							"body": "{}"
+						},
+						{
+							"name": "Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"dataStoreName\": \"cillum minim\",\n    \"dbConfig\": {\n        \"adminPassword\": \"INNC*MSH5ILpdt\",\n        \"adminUser\": \"veniam quis mollit\",\n        \"dbName\": \"occaecat ea\",\n        \"monitoringType\": \"ENHANCED\",\n        \"port\": 33264,\n        \"replicationUser\": \"dolor Ut magna\",\n        \"replicationPassword\": \"mollit quis occaecat\",\n        \"rootPassword\": \"esse ea\"\n    },\n    \"environmentId\": \"569a4353-d51b-decb-18d6-05af013bd482\",\n    \"instanceName\": \"qui exercitation dolor\",\n    \"provisioningConfig\": {\n        \"type\": \"magna sunt laboris\",\n        \"master\": {\n            \"hwConfig\": {\n                \"hdDiskSizeGB\": 65040,\n                \"cpuCores\": -93165974,\n                \"memoryGB\": -82165130,\n                \"instancePlanId\": \"urn:uuid:5b0ed2f3-d1a6-5dd6-5581-b4a98294a865\",\n                \"thinDisk\": true\n            }\n        },\n        \"segment\": {\n            \"hwConfig\": {\n                \"hdDiskSizeGB\": 36530,\n                \"cpuCores\": 82027410,\n                \"memoryGB\": 2804103,\n                \"instancePlanId\": \"urn:uuid:1406e2f6-6176-f5ef-57b2-8bfb5fd310e3\",\n                \"thinDisk\": true\n            },\n            \"primarySegmentsCount\": 60316834\n        }\n    },\n    \"templateId\": \"e6c36b16-5662-a6e0-14ab-6ac944d1db4e\",\n    \"dbBackupConfig\": {\n        \"automatedBackupStartTime\": \"21:26\",\n        \"numLocalBackupDays\": 18,\n        \"numRemoteBackupDays\": 96526897\n    },\n    \"dbMaintenanceConfig\": {\n        \"maintenanceWindowStartDay\": \"TUESDAY\",\n        \"maintenanceWindowStartTime\": \"2:28\",\n        \"maintenanceWindowDuration\": \"ad\",\n        \"minorVersionUpgradeEnabled\": true,\n        \"maintenanceWindowSelected\": false\n    },\n    \"enableProtection\": true,\n    \"requireClientSsl\": false,\n    \"dbOptions\": [\n        {\n            \"key\": \"nulla esse ullamco ex\",\n            \"value\": \"ea enim incididunt in\"\n        },\n        {\n            \"key\": \"dolor reprehenderit sunt dolore Ut\",\n            \"value\": \"officia do sint ut\"\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/databases",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"databases"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Create Database",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"dataStoreName\": \"WorkloadDatastore\",\n    \"dbConfig\": {\n        \"adminPassword\": \"NQFG@ci07\",\n        \"adminUser\": \"admin\",\n        \"dbName\": \"apitest\",\n        \"monitoringType\": \"NORMAL\",\n        \"port\": 5432,\n        \"rootPassword\": \"NQFG@ci070\"\n            },\n    \"environmentId\": \"7d47f803-a1d1-43b2-b43a-245961947877\",\n    \"templateId\": \"00000001-0000-0000-0000-000000010150\",\n    \"instanceName\": \"api-test\",\n    \"provisioningConfig\": {\n        \"type\": \"SingleNode\",\n            \"hwConfig\": {\n                \"hdDiskSizeGB\": 10308,\n                \"cpuCores\": 4,\n                \"memoryGB\": 8,\n                \"thinDisk\": true,\n                \"instancePlanId\": \"2f2c6f6e-9127-4144-885b-e3c5d6dbbe39\"\n                }\n        }\n    },\n    \"dbBackupConfig\": {\n        \"automatedBackupStartTime\": \"06:00\",\n        \"numLocalBackupDays\": 3,\n        \"numRemoteBackupDays\": 6\n    },\n    \"dbMaintenanceConfig\": {\n        \"maintenanceWindowStartDay\": \"SUNDAY\",\n        \"maintenanceWindowStartTime\": \"8:16\",\n        \"maintenanceWindowDuration\": \"l\",\n        \"minorVersionUpgradeEnabled\": false,\n        \"maintenanceWindowSelected\": false\n    },\n    \"dbOptions\": [\n        {\n        \"key\": \"timezone\",\n        \"value\": \"UTC\"\n        },\n        {\n        \"key\": \"max_connections\",\n        \"value\": \"100\"\n        },\n        {\n        \"key\": \"log_connections\",\n        \"value\": \"off\"\n        },\n        {\n        \"key\": \"locale\",\n        \"value\": \"unset\"\n        },\n        {\n        \"key\": \"lc_messages\",\n        \"value\": \"unset\"\n        },\n        {\n        \"key\": \"lc_monetary\",\n        \"value\": \"unset\"\n        },\n        {\n        \"key\": \"lc_numeric\",\n        \"value\": \"unset\"\n        },\n        {\n        \"key\": \"lc_time\",\n        \"value\": \"unset\"\n        }\n    ]\n    \"enableProtection\": true,\n    \"requireClientSsl\": true\n}"
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/databases",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"databases"
+							]
+						},
+						"description": "Endpoint to create database<br/><b>Authorized Roles</b> : ORG_ADMIN or ORG_USER"
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"dataStoreName\": \"cillum minim\",\n    \"dbConfig\": {\n        \"adminPassword\": \"INNC*MSH5ILpdt\",\n        \"adminUser\": \"veniam quis mollit\",\n        \"dbName\": \"occaecat ea\",\n        \"monitoringType\": \"ENHANCED\",\n        \"port\": 33264,\n        \"replicationUser\": \"dolor Ut magna\",\n        \"replicationPassword\": \"mollit quis occaecat\",\n        \"rootPassword\": \"esse ea\"\n    },\n    \"environmentId\": \"569a4353-d51b-decb-18d6-05af013bd482\",\n    \"instanceName\": \"qui exercitation dolor\",\n    \"provisioningConfig\": {\n        \"type\": \"magna sunt laboris\",\n        \"master\": {\n            \"hwConfig\": {\n                \"hdDiskSizeGB\": 65040,\n                \"cpuCores\": -93165974,\n                \"memoryGB\": -82165130,\n                \"instancePlanId\": \"urn:uuid:5b0ed2f3-d1a6-5dd6-5581-b4a98294a865\",\n                \"thinDisk\": true\n            }\n        },\n        \"segment\": {\n            \"hwConfig\": {\n                \"hdDiskSizeGB\": 36530,\n                \"cpuCores\": 82027410,\n                \"memoryGB\": 2804103,\n                \"instancePlanId\": \"urn:uuid:1406e2f6-6176-f5ef-57b2-8bfb5fd310e3\",\n                \"thinDisk\": true\n            },\n            \"primarySegmentsCount\": 60316834\n        }\n    },\n    \"templateId\": \"e6c36b16-5662-a6e0-14ab-6ac944d1db4e\",\n    \"dbBackupConfig\": {\n        \"automatedBackupStartTime\": \"21:26\",\n        \"numLocalBackupDays\": 18,\n        \"numRemoteBackupDays\": 96526897\n    },\n    \"dbMaintenanceConfig\": {\n        \"maintenanceWindowStartDay\": \"TUESDAY\",\n        \"maintenanceWindowStartTime\": \"2:28\",\n        \"maintenanceWindowDuration\": \"ad\",\n        \"minorVersionUpgradeEnabled\": true,\n        \"maintenanceWindowSelected\": false\n    },\n    \"enableProtection\": true,\n    \"requireClientSsl\": false,\n    \"dbOptions\": [\n        {\n            \"key\": \"nulla esse ullamco ex\",\n            \"value\": \"ea enim incididunt in\"\n        },\n        {\n            \"key\": \"dolor reprehenderit sunt dolore Ut\",\n            \"value\": \"officia do sint ut\"\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/databases",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"databases"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/vnd.vmware.dms-v1+json"
+								}
+							],
+							"cookie": [],
+							"body": "{}"
+						},
+						{
+							"name": "Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"description": "Added as a part of security scheme: bearer",
+										"key": "Authorization",
+										"value": "Bearer <token>"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"dataStoreName\": \"cillum minim\",\n    \"dbConfig\": {\n        \"adminPassword\": \"INNC*MSH5ILpdt\",\n        \"adminUser\": \"veniam quis mollit\",\n        \"dbName\": \"occaecat ea\",\n        \"monitoringType\": \"ENHANCED\",\n        \"port\": 33264,\n        \"replicationUser\": \"dolor Ut magna\",\n        \"replicationPassword\": \"mollit quis occaecat\",\n        \"rootPassword\": \"esse ea\"\n    },\n    \"environmentId\": \"569a4353-d51b-decb-18d6-05af013bd482\",\n    \"instanceName\": \"qui exercitation dolor\",\n    \"provisioningConfig\": {\n        \"type\": \"magna sunt laboris\",\n        \"master\": {\n            \"hwConfig\": {\n                \"hdDiskSizeGB\": 65040,\n                \"cpuCores\": -93165974,\n                \"memoryGB\": -82165130,\n                \"instancePlanId\": \"urn:uuid:5b0ed2f3-d1a6-5dd6-5581-b4a98294a865\",\n                \"thinDisk\": true\n            }\n        },\n        \"segment\": {\n            \"hwConfig\": {\n                \"hdDiskSizeGB\": 36530,\n                \"cpuCores\": 82027410,\n                \"memoryGB\": 2804103,\n                \"instancePlanId\": \"urn:uuid:1406e2f6-6176-f5ef-57b2-8bfb5fd310e3\",\n                \"thinDisk\": true\n            },\n            \"primarySegmentsCount\": 60316834\n        }\n    },\n    \"templateId\": \"e6c36b16-5662-a6e0-14ab-6ac944d1db4e\",\n    \"dbBackupConfig\": {\n        \"automatedBackupStartTime\": \"21:26\",\n        \"numLocalBackupDays\": 18,\n        \"numRemoteBackupDays\": 96526897\n    },\n    \"dbMaintenanceConfig\": {\n        \"maintenanceWindowStartDay\": \"TUESDAY\",\n        \"maintenanceWindowStartTime\": \"2:28\",\n        \"maintenanceWindowDuration\": \"ad\",\n        \"minorVersionUpgradeEnabled\": true,\n        \"maintenanceWindowSelected\": false\n    },\n    \"enableProtection\": true,\n    \"requireClientSsl\": false,\n    \"dbOptions\": [\n        {\n            \"key\": \"nulla esse ullamco ex\",\n            \"value\": \"ea enim incididunt in\"\n        },\n        {\n            \"key\": \"dolor reprehenderit sunt dolore Ut\",\n            \"value\": \"officia do sint ut\"\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/databases",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"databases"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Environment",
+			"item": [
+				{
+					"name": "Get Environments",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/environments/search/withOrgId?tenantId={{OrgId}}",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"environments",
+								"search",
+								"withOrgId"
+							],
+							"query": [
+								{
+									"key": "tenantId",
+									"value": "{{OrgId}}",
+									"description": "Required"
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "dolor proident mollit est occaecat",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "sed voluptate incidid",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Templates",
+			"item": [
+				{
+					"name": "Get all Templates",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/templates",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"templates"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Instance Plans",
+			"item": [
+				{
+					"name": "Get all Instance Plans",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/instancetype",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"instancetype"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Instance Plan",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/instancetype/:id",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"instancetype",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Instance Plan",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/vnd.vmware.dms-v1+json",
+								"type": "text"
+							},
+							{
+								"key": "X-Org-ID",
+								"value": "{{OrgId}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{accessToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cpu\": 4,\n    \"memory\": 8,\n    \"name\": \"apitest\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{baseUrl}}/provider/templates",
+							"protocol": "https",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"provider",
+								"templates"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "Number",
+			"value": ""
+		},
+		{
+			"key": "accessToken",
+			"value": ""
+		}
+	]
+}
