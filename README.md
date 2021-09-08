@@ -42,7 +42,9 @@ The commands in this collection are built from the Swagger API, which can be acc
 * Blog Posts
 
   > Getting Started - [Deploying and configuring the infrastructure](http://vexpert.me/dms-tanzu-getting-started)
+  >  
   > Self-Service DBaaS - [How to use the platform to create DBs on demand](http://vexpert.me/dms-self-service)
+  >  
   > [Data Management For VMware Tanzu API Postman Collection](http://vexpert.me/dms-api)
 
 * Official API Documentation here:
